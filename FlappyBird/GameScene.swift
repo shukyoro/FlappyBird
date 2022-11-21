@@ -430,9 +430,9 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         restartLabelNode.alpha = 0
         // スコアを0にする
         score = 0
-        scoreLabelNode.text = "Score\(score)"
+        scoreLabelNode.text = "Score:\(score)"
         itemScore = 0
-        itemScoreLabelNode.text = "Item Score\(score)"
+        itemScoreLabelNode.text = "Item Score:\(itemScore)"
         
         // 鳥を初期位置に戻し、壁と地面の両方に反発するように戻す
         bird.position = CGPoint(x: self.frame.size.width * 0.2, y: self.frame.size.height * 0.7)
