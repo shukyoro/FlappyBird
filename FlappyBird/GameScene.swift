@@ -14,7 +14,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     var wallNode:SKNode!
     var itemNode:SKNode!
     var bird:SKSpriteNode!
-    var gameOver:SKSpriteNode!
+    var gameOver:SKShapeNode!
     
     // 衝突判定カテゴリー
     let birdCategory: UInt32 = 1 << 0   // 0...00001
@@ -381,12 +381,14 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         } else {
             // 壁か地面と衝突した
             print("GameOver")
+
+            // ゲームオーバ時に画面を黒くする
+            let gameOverFadeIn = SKAction.fadeAlpha(to: 0.6, duration: 2)
+            gameOver.run(gameOverFadeIn)
+            // リスタート用にテキスト表示
+            let restartLabelFadeIn = SKAction.fadeIn(withDuration: 2)
+            restartLabelNode.run(restartLabelFadeIn)
             
-            //
-//            self.addChild(itemScoreLabelNode)
-            // フェードインさせるアクションを作る.
-            let fadeIn = SKAction.fadeIn(withDuration: 4)
-            restartLabelNode.run(fadeIn)
             
             // スクロールを停止させる
             scrollNode.speed = 0
@@ -403,6 +405,8 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     }
     
     func restart() {
+        // ゲームオーバー時の表示を消す
+        gameOver.alpha = 0
         restartLabelNode.alpha = 0
         // スコアを0にする
         score = 0
@@ -458,14 +462,22 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         itemScoreLabelNode.text = "Item Score:\(itemScore)"
         self.addChild(itemScoreLabelNode)
         
+        // リスタート用テキスト表示作成
         restartLabelNode = SKLabelNode()
-        restartLabelNode.fontColor = UIColor.black
+        restartLabelNode.fontColor = UIColor.white
         restartLabelNode.position = CGPoint(x: self.frame.size.width / 2, y: 200)
         restartLabelNode.zPosition = 200 // 一番手前に表示する
         restartLabelNode.horizontalAlignmentMode = SKLabelHorizontalAlignmentMode.center
         restartLabelNode.text = "タップで再スタート"
         restartLabelNode.alpha = 0
         self.addChild(restartLabelNode)
+        
+        // ゲームオーバー用画面表示作成
+        gameOver = SKShapeNode(rectOf: CGSize(width: self.frame.width, height: self.frame.height))
+        gameOver.position = CGPoint(x:self.frame.midX, y:self.frame.midY)
+        gameOver.fillColor = .black
+        gameOver.alpha = 0
+        self.addChild(gameOver)
     }
     
 }
