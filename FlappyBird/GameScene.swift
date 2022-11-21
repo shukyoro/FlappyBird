@@ -486,7 +486,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         restartLabelNode = SKLabelNode()
         restartLabelNode.fontColor = UIColor.white
         restartLabelNode.position = CGPoint(x: self.frame.size.width / 2, y: 200)
-        restartLabelNode.zPosition = 200
+        restartLabelNode.zPosition = 300
         restartLabelNode.horizontalAlignmentMode = SKLabelHorizontalAlignmentMode.center
         restartLabelNode.text = "タップで再スタート"
         restartLabelNode.alpha = 0
