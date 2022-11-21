@@ -14,6 +14,9 @@
 		860F9C2A29261E5B00955DCD /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 860F9C2929261E5B00955DCD /* Assets.xcassets */; };
 		860F9C2D29261E5B00955DCD /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 860F9C2B29261E5B00955DCD /* LaunchScreen.storyboard */; };
 		860F9C35292622E700955DCD /* GameScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = 860F9C34292622E700955DCD /* GameScene.swift */; };
+		867C9D6F292B76F70037596D /* itemGet.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 867C9D6E292B76F70037596D /* itemGet.mp3 */; };
+		867C9D71292B7A2D0037596D /* comicalpizzicato.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 867C9D70292B7A2D0037596D /* comicalpizzicato.mp3 */; };
+		867C9D73292B7A340037596D /* gameOver.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 867C9D72292B7A340037596D /* gameOver.mp3 */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -26,6 +29,9 @@
 		860F9C2C29261E5B00955DCD /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		860F9C2E29261E5B00955DCD /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		860F9C34292622E700955DCD /* GameScene.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameScene.swift; sourceTree = "<group>"; };
+		867C9D6E292B76F70037596D /* itemGet.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = itemGet.mp3; sourceTree = "<group>"; };
+		867C9D70292B7A2D0037596D /* comicalpizzicato.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = comicalpizzicato.mp3; sourceTree = "<group>"; };
+		867C9D72292B7A340037596D /* gameOver.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = gameOver.mp3; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -66,6 +72,9 @@
 				860F9C2929261E5B00955DCD /* Assets.xcassets */,
 				860F9C2B29261E5B00955DCD /* LaunchScreen.storyboard */,
 				860F9C2E29261E5B00955DCD /* Info.plist */,
+				867C9D6E292B76F70037596D /* itemGet.mp3 */,
+				867C9D70292B7A2D0037596D /* comicalpizzicato.mp3 */,
+				867C9D72292B7A340037596D /* gameOver.mp3 */,
 			);
 			path = FlappyBird;
 			sourceTree = "<group>";
@@ -128,6 +137,9 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				867C9D71292B7A2D0037596D /* comicalpizzicato.mp3 in Resources */,
+				867C9D6F292B76F70037596D /* itemGet.mp3 in Resources */,
+				867C9D73292B7A340037596D /* gameOver.mp3 in Resources */,
 				860F9C2D29261E5B00955DCD /* LaunchScreen.storyboard in Resources */,
 				860F9C2A29261E5B00955DCD /* Assets.xcassets in Resources */,
 				860F9C2829261E5A00955DCD /* Main.storyboard in Resources */,

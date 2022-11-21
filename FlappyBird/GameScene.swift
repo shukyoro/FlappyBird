@@ -31,8 +31,12 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     var itemScore = 0
     var itemScoreLabelNode:SKLabelNode!
     let userDefaults:UserDefaults = UserDefaults.standard
-    
+    // リスタート用テキスト
     var restartLabelNode:SKLabelNode!
+    
+    var gameBGM : SKAction!
+    var itemSE : SKAction!
+    var gameOverSE : SKAction!
     
     // SKView上にシーンが表示されたときに呼ばれるメソッド
     override func didMove(to view: SKView) {
@@ -44,6 +48,17 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         // 背景色を設定
         backgroundColor = UIColor(red: 0.15, green: 0.75, blue: 0.9, alpha: 1)
         
+        // BGMを設定
+        gameBGM = SKAction.playSoundFileNamed("comicalpizzicato.mp3", waitForCompletion: true)
+        //無限ループするアクションに変更する。
+        let gameBgmLoop = SKAction.repeatForever(gameBGM)
+        //アクションを実行する。
+        self.run(gameBgmLoop)
+        
+        // 効果音を設定
+        itemSE = SKAction.playSoundFileNamed("itemGet.mp3", waitForCompletion: true)
+        gameOverSE = SKAction.playSoundFileNamed("gameOver.mp3", waitForCompletion: true)
+
         // スクロールするスプライトの親ノード
         scrollNode = SKNode()
         addChild(scrollNode)
@@ -303,9 +318,9 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             
             // アイテム出現Y位置を規定範囲でランダムで出力
             let random_y = CGFloat.random(in: (self.frame.height * 0.2 + groundSize.height) ... self.frame.height * 0.8)
-            print("最小　\(self.frame.height * 0.2 + groundSize.height)")
-            print("最大　\(self.frame.height * 0.8 + groundSize.height)")
-            print(random_y)
+//            print("最小　\(self.frame.height * 0.2 + groundSize.height)")
+//            print("最大　\(self.frame.height * 0.8 + groundSize.height)")
+//            print(random_y)
             
             // スプライトの表示する位置を指定する　壁の間にアイテム位置を指定
             sprite.position = CGPoint(x: self.frame.size.width + wallSize.width / 2 - movingDistance / 4, y: random_y)
@@ -372,6 +387,8 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         } else if (contact.bodyA.categoryBitMask & itemCategory) == itemCategory || (contact.bodyB.categoryBitMask & itemCategory) == itemCategory {
             // アイテムと衝突した
             print("Item ScoreUp")
+            //効果音を鳴らす
+            self.run(itemSE)
             itemScore += 1
             itemScoreLabelNode.text = "Item Score:\(itemScore)"
             // 衝突したアイテムを削除
@@ -381,6 +398,8 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         } else {
             // 壁か地面と衝突した
             print("GameOver")
+            //効果音を鳴らす
+            self.run(gameOverSE)
 
             // ゲームオーバ時に画面を黒くする
             let gameOverFadeIn = SKAction.fadeAlpha(to: 0.6, duration: 2)
@@ -388,7 +407,6 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             // リスタート用にテキスト表示
             let restartLabelFadeIn = SKAction.fadeIn(withDuration: 2)
             restartLabelNode.run(restartLabelFadeIn)
-            
             
             // スクロールを停止させる
             scrollNode.speed = 0
@@ -406,7 +424,9 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     
     func restart() {
         // ゲームオーバー時の表示を消す
+        gameOver.removeAllActions()
         gameOver.alpha = 0
+        restartLabelNode.removeAllActions()
         restartLabelNode.alpha = 0
         // スコアを0にする
         score = 0
@@ -437,7 +457,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         scoreLabelNode = SKLabelNode()
         scoreLabelNode.fontColor = UIColor.black
         scoreLabelNode.position = CGPoint(x: 10, y: self.frame.size.height - 60)
-        scoreLabelNode.zPosition = 100 // 一番手前に表示する
+        scoreLabelNode.zPosition = 100
         scoreLabelNode.horizontalAlignmentMode = SKLabelHorizontalAlignmentMode.left
         scoreLabelNode.text = "Score:\(score)"
         self.addChild(scoreLabelNode)
@@ -447,7 +467,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         bestScoreLabelNode = SKLabelNode()
         bestScoreLabelNode.fontColor = UIColor.black
         bestScoreLabelNode.position = CGPoint(x: 10, y: self.frame.size.height - 90)
-        bestScoreLabelNode.zPosition = 100 // 一番手前に表示する
+        bestScoreLabelNode.zPosition = 100
         bestScoreLabelNode.horizontalAlignmentMode = SKLabelHorizontalAlignmentMode.left
         bestScoreLabelNode.text = "Best Score:\(bestScore)"
         self.addChild(bestScoreLabelNode)
@@ -457,7 +477,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         itemScoreLabelNode = SKLabelNode()
         itemScoreLabelNode.fontColor = UIColor.black
         itemScoreLabelNode.position = CGPoint(x: 10, y: self.frame.size.height - 120)
-        itemScoreLabelNode.zPosition = 100 // 一番手前に表示する
+        itemScoreLabelNode.zPosition = 100
         itemScoreLabelNode.horizontalAlignmentMode = SKLabelHorizontalAlignmentMode.left
         itemScoreLabelNode.text = "Item Score:\(itemScore)"
         self.addChild(itemScoreLabelNode)
@@ -466,7 +486,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         restartLabelNode = SKLabelNode()
         restartLabelNode.fontColor = UIColor.white
         restartLabelNode.position = CGPoint(x: self.frame.size.width / 2, y: 200)
-        restartLabelNode.zPosition = 200 // 一番手前に表示する
+        restartLabelNode.zPosition = 200
         restartLabelNode.horizontalAlignmentMode = SKLabelHorizontalAlignmentMode.center
         restartLabelNode.text = "タップで再スタート"
         restartLabelNode.alpha = 0
@@ -476,6 +496,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         gameOver = SKShapeNode(rectOf: CGSize(width: self.frame.width, height: self.frame.height))
         gameOver.position = CGPoint(x:self.frame.midX, y:self.frame.midY)
         gameOver.fillColor = .black
+        gameOver.zPosition = 200
         gameOver.alpha = 0
         self.addChild(gameOver)
     }
