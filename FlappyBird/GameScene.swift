@@ -306,7 +306,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         let removeItem = SKAction.removeFromParent()
         
         // 二つのアニメーションを順に実行するアクションを作成
-        let itemAnimation = SKAction.sequence([moveItem, removeItem])
+        let itemMoveAnimation = SKAction.sequence([moveItem, removeItem])
         
         // 地面の画像サイズを取得
         let groundSize = SKTexture(imageNamed: "ground").size()
@@ -323,7 +323,8 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
 //            print(random_y)
             
             // スプライトの表示する位置を指定する　壁の間にアイテム位置を指定
-            sprite.position = CGPoint(x: self.frame.size.width + wallSize.width / 2 - movingDistance / 4, y: random_y)
+//            sprite.position = CGPoint(x: self.frame.size.width + wallSize.width / 2 - movingDistance / 4, y: random_y)
+            sprite.position = CGPoint(x: self.frame.size.width + wallSize.width / 2, y: random_y)
             
             // 物理体を設定
             sprite.physicsBody = SKPhysicsBody(circleOfRadius: itemTexture.size().height / 2)
@@ -332,19 +333,24 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             // 衝突の時に動かないように設定する
             sprite.physicsBody?.isDynamic = false
             // アニメーションを設定
-            sprite.run(itemAnimation)
+            sprite.run(itemMoveAnimation)
             
             // シーンにスプライトを追加する
             self.itemNode.addChild(sprite)
         })
+        // 壁の間に表示するためア1秒待つ
+        let wait1sAnimation = SKAction.wait(forDuration: 1)
         // 次のアイテム作成までの時間まちのアクションを作成
-        let waitAnimation = SKAction.wait(forDuration: 2)
+        let wait2sAnimation = SKAction.wait(forDuration: 2)
 
         // アイテムを作成->時間待ち->アイテムを作成を無限に繰り返すアクションを作成
-        let repeatForeverAnimation = SKAction.repeatForever(SKAction.sequence([createItemAnimation,  waitAnimation]))
-
+        let repeatForeverAnimation = SKAction.repeatForever(SKAction.sequence([createItemAnimation,  wait2sAnimation]))
+        
+        // 二つのアニメーションを順に実行するアクションを作成
+        let itemAnimation = SKAction.sequence([wait1sAnimation, repeatForeverAnimation])
+        
         // アイテムを表示するノードにアイテムの作成を無限に繰り返すアクションを設定
-        itemNode.run(repeatForeverAnimation)
+        itemNode.run(itemAnimation)
         
     }
     
@@ -391,9 +397,16 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             self.run(itemSE)
             itemScore += 1
             itemScoreLabelNode.text = "Item Score:\(itemScore)"
-            // 衝突したアイテムを削除
-            contact.bodyB.node?.removeFromParent()
-            
+            // どちらがアイテムか判別
+            if contact.bodyA.categoryBitMask == itemCategory {
+                // 衝突したアイテムを削除
+                contact.bodyA.node?.removeFromParent()
+            } else {
+                // 衝突したアイテムを削除
+                contact.bodyB.node?.removeFromParent()
+            }
+//            print(contact.bodyA.categoryBitMask)
+//            print(contact.bodyB.categoryBitMask)
 //            print(contact.bodyB)
         } else {
             // 壁か地面と衝突した
