@@ -38,6 +38,8 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     var itemSE : SKAction!
     var gameOverSE : SKAction!
     
+    var gameAudio = SKAudioNode.init(fileNamed: "comicalpizzicato.mp3")
+    
     // SKView上にシーンが表示されたときに呼ばれるメソッド
     override func didMove(to view: SKView) {
         
@@ -49,11 +51,14 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         backgroundColor = UIColor(red: 0.15, green: 0.75, blue: 0.9, alpha: 1)
         
         // BGMを設定
-        gameBGM = SKAction.playSoundFileNamed("comicalpizzicato.mp3", waitForCompletion: true)
+//        gameBGM = SKAction.playSoundFileNamed("comicalpizzicato.mp3", waitForCompletion: true)
         //無限ループするアクションに変更する。
-        let gameBgmLoop = SKAction.repeatForever(gameBGM)
+//        let gameBgmLoop = SKAction.repeatForever(gameBGM)
         //アクションを実行する。
-        self.run(gameBgmLoop)
+//        self.run(gameBgmLoop)
+        
+        // BGM AudioNode　でのテスト
+        addChild(gameAudio)
         
         // 効果音を設定
         itemSE = SKAction.playSoundFileNamed("itemGet.mp3", waitForCompletion: true)
@@ -388,7 +393,8 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
                 bestScore = score
                 bestScoreLabelNode.text = "Best Score:\(bestScore)"
                 userDefaults.set(bestScore, forKey: "BEST")
-                userDefaults.synchronize()
+                // 使う必要ない
+//                userDefaults.synchronize()
             }
         } else if (contact.bodyA.categoryBitMask & itemCategory) == itemCategory || (contact.bodyB.categoryBitMask & itemCategory) == itemCategory {
             // アイテムと衝突した
@@ -413,6 +419,9 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             print("GameOver")
             //効果音を鳴らす
             self.run(gameOverSE)
+            
+            // BGM停止
+            gameAudio.run(SKAction.stop())
 
             // ゲームオーバ時に画面を黒くする
             let gameOverFadeIn = SKAction.fadeAlpha(to: 0.6, duration: 2)
@@ -436,6 +445,8 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     }
     
     func restart() {
+        // BGM再生
+        gameAudio.run(SKAction.play())
         // ゲームオーバー時の表示を消す
         gameOver.removeAllActions()
         gameOver.alpha = 0
